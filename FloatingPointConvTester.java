@@ -8,11 +8,12 @@ class FloatingPointConvTester extends FloatingPointConv{
     }
     public static void testIntegers(){
         // FloatingPointConv Converter = new FloatingPointConv();
-        String data_stream = String.format("%s\n%s\n%s\n%s",
+        String data_stream = String.format("%s\n%s\n%s\n%s\n%s",
                                             "123",
                                             "75",
                                             "10000000000",
-                                            "exit");
+                                            "-10",
+                                            "exit");        // make sure to exit the program
         System.setIn(new ByteArrayInputStream(data_stream.getBytes()));
         FloatingPointConv.main(new String[] {});
     }

@@ -16,7 +16,7 @@ public class FloatingPointConv {
                 String standard_rep = Simplified_FloatingPoint(number);
                 String IEEE_rep = IEEE_FloatingPoint(number);
 
-                System.out.println(standard_rep);
+                System.out.println(standard_rep + "\n");
             } catch (NumberFormatException e) {
                 System.out.println("Invalid input, please provide a decimal number...\n-----\n");
             } catch (ArithmeticException e){
