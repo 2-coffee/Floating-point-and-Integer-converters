@@ -29,7 +29,7 @@ public class FloatingPointConv {
             bin_res.append((char)whole_number%2);
             whole_number /= 2;
         }
-        int radix_index = bin_res.length();
+        int radix_index = bin_res.length();                 // technically, the radix_index is the exponent we want
 
         String radix_ind = Integer.toString(radix_index);   // to store the radix_decimal
         bin_res.append(radix_ind);                          // append to string so we can access it
