@@ -8,13 +8,17 @@ public class FloatingPointConv {
                 float number = in.nextFloat(); // get input number
                 String standard_rep = Standard_FLoatingPoint(number);
                 String IEEE_rep = IEEE_FloatingPoint(number);
-                
+
             } catch (Exception e) {
                 System.out.println("Invalid input, please provide a decimal number...\n-----\n");
             }
         }
     }
+    private static String DecimalToBinary(float number){
+        StringBuilder bin_res = new StringBuilder();
+        float left_radix = (float)Math.floor(number);
 
+    }
     private static String Standard_FloatingPoint(float number){
         
     }
