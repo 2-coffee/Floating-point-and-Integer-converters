@@ -7,12 +7,16 @@ public class FloatingPointConv {
             try {
                 System.out.println("Input a decimal number or type Exit to exit.");
                 String response = in.nextLine(); // get input number
+
                 if (response.equalsIgnoreCase("exit")){
                     System.out.println("Shutting down...\n-----\n-----");
                     in.close();
                     return;
+                } else if (response.length() == 0) {
+                    System.out.println("Empty input, try again.");
                 }
                 float number = Float.parseFloat(response);
+                System.out.println(number);
                 String standard_rep = Simplified_FloatingPoint(number);
                 String IEEE_rep = IEEE_FloatingPoint(number);
 
@@ -30,6 +34,14 @@ public class FloatingPointConv {
             whole_number /= 2;
         }
         int radix_index = bin_res.length();                 // technically, the radix_index is the exponent we want
+        float right_radix = number - left_radix;
+
+        for (int i = 0; i < String.valueOf(whole_number).length(); i++) {
+            float temp = right_radix * 2;
+            right_radix = (float)Math.floor(temp);
+            bin_res.append((char)(int)(temp-right_radix));
+            right_radix = temp - right_radix;
+        }
 
         String radix_ind = Integer.toString(radix_index);   // to store the radix_decimal
         bin_res.append(radix_ind);                          // append to string so we can access it
@@ -49,7 +61,8 @@ public class FloatingPointConv {
 
     private static String IEEE_FloatingPoint(float number){
         // The IEEE-754 single precision floating point standard uses an 8-bit exponent (with a bias of 127) and a 23-bit significand.  
-        DecimalToBinary(number);
+        String bin_buffer = DecimalToBinary(number);
+        int length = bin_buffer.length();
 
         return "";
     }
