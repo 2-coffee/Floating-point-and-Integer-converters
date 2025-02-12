@@ -29,12 +29,21 @@ public class FloatingPointConv {
             bin_res.append((char)whole_number%2);
             whole_number /= 2;
         }
-        System.out.println(bin_res.reverse().toString());
-        return "";
+        int radix_index = bin_res.length();
+
+        String radix_ind = Integer.toString(radix_index);   // to store the radix_decimal
+        bin_res.append(radix_ind);                          // append to string so we can access it
+        bin_res.append(radix_ind.length());                 // to tell us how many expo characters we need
+        return bin_res.toString();
     }
+    
     private static String Simplified_FloatingPoint(float number){
         // The simplified model uses 1 bit for the sign, 5 bits for the exponent, and 8 bits for the significand.  
-        DecimalToBinary(number);
+        String bin_buffer = DecimalToBinary(number);        // convert floating number to binary
+        int length = bin_buffer.length();
+        int expo_length = bin_buffer.charAt(length - 1);
+        // get the exponent
+        int expo = Integer.parseInt(bin_buffer.substring(length-expo_length-1, length-1));  // 110141 
         return "";
     }
 
