@@ -12,6 +12,7 @@ public class FloatingPointConv {
                     in.close();
                     return;
                 }
+                System.out.println("Your response: " + response);
                 float number = Float.parseFloat(response);
                 String standard_rep = Simplified_FloatingPoint(number);
                 String IEEE_rep = IEEE_FloatingPoint(number);
@@ -20,7 +21,7 @@ public class FloatingPointConv {
             } catch (NumberFormatException e) {
                 System.out.println("Invalid input, please provide a decimal number...\n-----\n");
             } catch (ArithmeticException e){
-                System.out.println("Error: Overflow Occurred.");
+                System.out.println("Error: Overflow Occurred.\n");
                 System.out.println(e.getMessage());
             }
         }
@@ -66,7 +67,7 @@ public class FloatingPointConv {
             expo/=2;
         }
         if (expo > 0){  // overflow
-            throw new ArithmeticException("Caught in Simplified_FloatingPoint");
+            throw new ArithmeticException("Overflow Caught in Simplified_FloatingPoint\n");
         }
         int mantissa_index = 0;       
         while (mantissa_index+6 < 14 && mantissa_index < length-(1+expo_length)){
@@ -78,6 +79,14 @@ public class FloatingPointConv {
 
     private static String IEEE_FloatingPoint(float number){
         // The IEEE-754 single precision floating point standard uses an 8-bit exponent (with a bias of 127) and a 23-bit significand.  
+        String bin_buffer = DecimalToBinary(number);
+        
+        // overflow exception, exponent is greater than 255
+        if (expo>0){
+            throw new ArithmeticException("Overflow Caught in IEEE_FloatingPoint");
+        }  
+
+
         return "";
     }
 }
