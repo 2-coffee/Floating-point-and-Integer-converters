@@ -1,6 +1,4 @@
 import java.io.ByteArrayInputStream;
-import java.io.*;
-import java.util.*;
 
 class FloatingPointConvTester extends FloatingPointConv{
     public static void main(String[] args) {
