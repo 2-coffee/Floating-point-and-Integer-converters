@@ -108,9 +108,7 @@ public class FloatingPointConv {
             IEEE_assembler[0] = '1';
         }
 
-        if (expo > 255){ // overflow exception, exponent is greater than 255
-            throw new ArithmeticException("Overflow Caught in IEEE_FloatingPoint\n");
-        }  
+
 
         while (expo > 0 && expo_index > 0) {
             if (expo % 2 == 1) {
@@ -119,6 +117,10 @@ public class FloatingPointConv {
             expo_index--;
             expo /= 2;
         }
+
+        if (expo > 0) { // overflow exception, exponent is greater than 255
+            throw new ArithmeticException("Overflow Caught in IEEE_FloatingPoint\n");
+        }  
 
         for (int mantissa_index = 0; mantissa_index + 9 < 32 && 
             mantissa_index < (length - (1 + expo_length)); mantissa_index++) {
