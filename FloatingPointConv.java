@@ -1,5 +1,6 @@
 import java.util.*;
-
+// 12.625
+// 1100.101
 public class FloatingPointConv {
     public static void main(String[] args){
         Scanner in = new Scanner(System.in);
@@ -21,7 +22,8 @@ public class FloatingPointConv {
                 String standard_rep = Simplified_FloatingPoint(number);
                 String IEEE_rep = IEEE_FloatingPoint(number);
 
-                System.out.println(standard_rep + "\n");
+                System.out.println("Simplified Floating Point: " + standard_rep);
+                System.out.println("IEEE Floating Point: " + IEEE_rep);
             } catch (NumberFormatException e) {
                 System.out.println("Invalid input, please provide a decimal number...\n-----\n");
             } catch (ArithmeticException e){
@@ -47,11 +49,11 @@ public class FloatingPointConv {
         // limits amount of iterations of getting decimals to the digit that float accuracy diminishes ~8 digits in a number
         for (int i = 0; i < (23 - (bin_res.length())); i++) { 
             float temp = right_radix * 2;
-            right_radix = (float)Math.floor(temp);
-            bin_res.append((char)(int)(temp - right_radix));
-            right_radix = temp - right_radix;
+            float whole_remainder = (float)Math.floor(temp);
+            bin_res.append((int)(whole_remainder));
+            right_radix = temp - whole_remainder;
         }
-
+        System.out.println(bin_res);
         String radix_ind = Integer.toString(radix_index);   // to store the radix_decimal
         bin_res.append(radix_ind);                          // append to string so we can access it
         bin_res.append(radix_ind.length());                 // to tell us how many expo characters we need
@@ -107,9 +109,6 @@ public class FloatingPointConv {
         if (number < 0) { // negative bit
             IEEE_assembler[0] = '1';
         }
-
-
-
         while (expo > 0 && expo_index > 0) {
             if (expo % 2 == 1) {
                 IEEE_assembler[expo_index] = '1';
