@@ -108,7 +108,7 @@ public class FloatingPointConv {
             IEEE_assembler[0] = '1';
         }
 
-        if (expo > 0){ // overflow exception, exponent is greater than 255
+        if (expo > 255){ // overflow exception, exponent is greater than 255
             throw new ArithmeticException("Overflow Caught in IEEE_FloatingPoint\n");
         }  
 
