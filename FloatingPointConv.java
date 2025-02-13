@@ -15,6 +15,7 @@ public class FloatingPointConv {
                 } else if (response.length() == 0) {
                     System.out.println("Empty input, try again.");
                 }
+                System.out.println("Your response: " + response);
                 float number = Float.parseFloat(response);
                 System.out.println(number);
                 String standard_rep = Simplified_FloatingPoint(number);
@@ -24,7 +25,7 @@ public class FloatingPointConv {
             } catch (NumberFormatException e) {
                 System.out.println("Invalid input, please provide a decimal number...\n-----\n");
             } catch (ArithmeticException e){
-                System.out.println("Error: Overflow Occurred.");
+                System.out.println("Error: Overflow Occurred.\n");
                 System.out.println(e.getMessage());
             }
         }
@@ -38,9 +39,12 @@ public class FloatingPointConv {
             bin_res.append((char)whole_number%2);
             whole_number = whole_number/2;
         }
-        // System.out.println(bin_res.length());            // should be the exponent number
+
         int radix_index = bin_res.length();                 // technically, the radix_index is the exponent we want
         bin_res.reverse();
+
+        
+
         String radix_ind = Integer.toString(radix_index);   // to store the radix_decimal
         bin_res.append(radix_ind);                          // append to string so we can access it
         bin_res.append(radix_ind.length());                 // to tell us how many expo characters we need
@@ -70,7 +74,7 @@ public class FloatingPointConv {
             expo/=2;
         }
         if (expo > 0){  // overflow
-            throw new ArithmeticException("Caught in Simplified_FloatingPoint");
+            throw new ArithmeticException("Overflow Caught in Simplified_FloatingPoint\n");
         }
         int mantissa_index = 0;       
         while (mantissa_index+6 < 14 && mantissa_index < length-(1+expo_length)){
@@ -83,7 +87,12 @@ public class FloatingPointConv {
     private static String IEEE_FloatingPoint(float number){
         // The IEEE-754 single precision floating point standard uses an 8-bit exponent (with a bias of 127) and a 23-bit significand.  
         String bin_buffer = DecimalToBinary(number);
-        int length = bin_buffer.length();
+        
+        // overflow exception, exponent is greater than 255
+        if (expo>0){
+            throw new ArithmeticException("Overflow Caught in IEEE_FloatingPoint");
+        }  
+
 
         return "";
     }
