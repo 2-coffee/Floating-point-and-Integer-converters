@@ -7,13 +7,17 @@ public class FloatingPointConv {
             try {
                 System.out.println("Input a decimal number or type Exit to exit.");
                 String response = in.nextLine(); // get input number
+
                 if (response.equalsIgnoreCase("exit")){
                     System.out.println("Shutting down...\n-----\n-----");
                     in.close();
                     return;
+                } else if (response.length() == 0) {
+                    System.out.println("Empty input, try again.");
                 }
                 System.out.println("Your response: " + response);
                 float number = Float.parseFloat(response);
+                System.out.println(number);
                 String standard_rep = Simplified_FloatingPoint(number);
                 String IEEE_rep = IEEE_FloatingPoint(number);
 
@@ -35,9 +39,19 @@ public class FloatingPointConv {
             bin_res.append((char)whole_number%2);
             whole_number = whole_number/2;
         }
-        // System.out.println(bin_res.length());            // should be the exponent number
+
         int radix_index = bin_res.length();                 // technically, the radix_index is the exponent we want
         bin_res.reverse();
+
+        float right_radix = number - left_radix; // number - integers
+        // limits amount of iterations of getting decimals to the digit that float accuracy diminishes ~8 digits in a number
+        for (int i = 0; i < (23 - (bin_res.length())); i++) { 
+            float temp = right_radix * 2;
+            right_radix = (float)Math.floor(temp);
+            bin_res.append((char)(int)(temp - right_radix));
+            right_radix = temp - right_radix;
+        }
+
         String radix_ind = Integer.toString(radix_index);   // to store the radix_decimal
         bin_res.append(radix_ind);                          // append to string so we can access it
         bin_res.append(radix_ind.length());                 // to tell us how many expo characters we need
@@ -77,16 +91,42 @@ public class FloatingPointConv {
         return String.valueOf(Simplified_assembler);
     }
 
-    private static String IEEE_FloatingPoint(float number){
+    private static String IEEE_FloatingPoint(float number) {
         // The IEEE-754 single precision floating point standard uses an 8-bit exponent (with a bias of 127) and a 23-bit significand.  
         String bin_buffer = DecimalToBinary(number);
-        
-        // overflow exception, exponent is greater than 255
-        if (expo>0){
-            throw new ArithmeticException("Overflow Caught in IEEE_FloatingPoint");
+        int length = bin_buffer.length();
+        //exponent length is stored at the end of the string
+        int expo_length = bin_buffer.charAt(length - 1) - '0'; // because casting a char into an int gives the ascii value, subtract the ascii of '0' (48)
+        //exponent is stored a step prior at 
+        int expo = Integer.parseInt(bin_buffer.substring(length - expo_length - 1, length - 1));
+        char[] IEEE_assembler = new char[32];
+        Arrays.fill(IEEE_assembler, '0');
+
+        int expo_index = 8; // 1, 2, 3, 4, 5, 6, 7, 8
+
+        if (number < 0) { // negative bit
+            IEEE_assembler[0] = '1';
+        }
+
+
+
+        while (expo > 0 && expo_index > 0) {
+            if (expo % 2 == 1) {
+                IEEE_assembler[expo_index] = '1';
+            }
+            expo_index--;
+            expo /= 2;
+        }
+
+        if (expo > 0) { // overflow exception, exponent is greater than 255
+            throw new ArithmeticException("Overflow Caught in IEEE_FloatingPoint\n");
         }  
 
+        for (int mantissa_index = 0; mantissa_index + 9 < 32 && 
+            mantissa_index < (length - (1 + expo_length)); mantissa_index++) {
+            IEEE_assembler[mantissa_index + 9] = bin_buffer.charAt(mantissa_index);
+        }
 
-        return "";
+        return String.valueOf(IEEE_assembler);
     }
 }
