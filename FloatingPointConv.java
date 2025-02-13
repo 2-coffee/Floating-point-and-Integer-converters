@@ -18,7 +18,7 @@ public class FloatingPointConv {
                 }
                 System.out.println("Your response: " + response);
                 float number = Float.parseFloat(response);
-                System.out.println(number);
+                //System.out.println(number);
                 String standard_rep = Simplified_FloatingPoint(number);
                 String IEEE_rep = IEEE_FloatingPoint(number);
 
@@ -53,7 +53,7 @@ public class FloatingPointConv {
             bin_res.append((int)(whole_remainder));
             right_radix = temp - whole_remainder;
         }
-        System.out.println(bin_res);
+        //System.out.println(bin_res);
         String radix_ind = Integer.toString(radix_index);   // to store the radix_decimal
         bin_res.append(radix_ind);                          // append to string so we can access it
         bin_res.append(radix_ind.length());                 // to tell us how many expo characters we need
@@ -100,7 +100,8 @@ public class FloatingPointConv {
         //exponent length is stored at the end of the string
         int expo_length = bin_buffer.charAt(length - 1) - '0'; // because casting a char into an int gives the ascii value, subtract the ascii of '0' (48)
         //exponent is stored a step prior at 
-        int expo = Integer.parseInt(bin_buffer.substring(length - expo_length - 1, length - 1));
+        int expo = Integer.parseInt(bin_buffer.substring(length - expo_length - 1, length - 1))-1; // since we want 1.___
+        expo += 127; // bias of 127
         char[] IEEE_assembler = new char[32];
         Arrays.fill(IEEE_assembler, '0');
 
@@ -116,16 +117,14 @@ public class FloatingPointConv {
             expo_index--;
             expo /= 2;
         }
-
         if (expo > 0) { // overflow exception, exponent is greater than 255
             throw new ArithmeticException("Overflow Caught in IEEE_FloatingPoint\n");
         }  
-
-        for (int mantissa_index = 0; mantissa_index + 9 < 32 && 
-            mantissa_index < (length - (1 + expo_length)); mantissa_index++) {
-            IEEE_assembler[mantissa_index + 9] = bin_buffer.charAt(mantissa_index);
+        // start at 1 because we have 1.xxx but our buffer is continuous
+        for (int mantissa_index = 1; mantissa_index + 8 < 32 && 
+            mantissa_index < (length - (1 + expo_length)); mantissa_index++) {  // all we have to do now is put the mantissa in order
+            IEEE_assembler[mantissa_index + 8] = bin_buffer.charAt(mantissa_index);
         }
-
         return String.valueOf(IEEE_assembler);
     }
 }
