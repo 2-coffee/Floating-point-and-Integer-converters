@@ -1,6 +1,7 @@
+// Franklin Do, Kevin Le Part 1
+
 import java.util.*;
-// 12.625
-// 1100.101
+
 public class FloatingPointConv {
     public static void main(String[] args){
         Scanner in = new Scanner(System.in);
