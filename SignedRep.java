@@ -129,14 +129,12 @@ public class SignedRep {
                 } else {        // bit == '0'
                     comp_buffer[i] = '1';
                     if (i==1){
-                        comp_buffer[0] = '1';
+                        return "Overflow Error";
                     }
                     break;
                 }
             }
-            if (comp_buffer[0] == 0){
-                comp_buffer[1] = '1';
-            }
+            comp_buffer[1] = '1';
             return String.valueOf(comp_buffer);
             // add one to the flipped bits and see if there's an overflow needed
         }
