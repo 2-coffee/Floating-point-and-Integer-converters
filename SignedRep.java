@@ -10,7 +10,7 @@ public class SignedRep {
         Scanner in = new Scanner(System.in);
 
         while (true){
-            System.out.println("Input a Binary in Signed Magnitude or 2's Complement\nExit to exit...");
+            System.out.println("Input a Binary in Signed Magnitude or 2's Complement. Exit to exit...");
             String response = in.nextLine();
             boolean invalid_flag = false;       // easy way to restart input loop
             if (response.equalsIgnoreCase("exit")){
@@ -77,16 +77,17 @@ public class SignedRep {
             if (bin_arr[bin_arr.length-1] == '0'){  // add 1 to 2's complement 
                 bin_arr[bin_arr.length-1] = '1';
                 return String.valueOf(bin_arr);     // no need to do any additional work
-            }   // 1100
-            int previous_carry = 0;                 // 0100
+            }   
+            int previous_carry = 0;                 
             int carry = 0;
-            for (int i = bin_arr.length - 1; i >= 0; i--){   // 1011
+            for (int i = bin_arr.length - 1; i >= 0; i--){   // add 1 to 2's complement 
                 previous_carry = carry;
                 char bit = bin_arr[i];
                 if (bit == '1'){    
                     bin_arr[i] = '0';
                     carry = 1;
-                    if (i==0){  // 
+                    if (i==0){  // carry all the way to the end, check for valid overflow
+                        // theoretically this should never happen because signed bits represent less unique numbers than 2's comp
                         if (carry != previous_carry){
                             return "Overflow Error";
                         }
@@ -107,6 +108,38 @@ public class SignedRep {
         return binary;
     }
     private static String twoCompsTOSigned(String binary){
-        return "";
+        // 1101
+        // 0111
+        // 11000
+        if (binary.charAt(0)=='1'){     // is negative
+            // construct an array that has room for one extra bit incase of overflow since 2's complement can represent more numbers
+            char[] comp_buffer = new char[binary.length()+1];
+            for (int i = binary.length(); i > 0; i--){     // flips the bits
+                char bit = binary.charAt(i-1);
+                if (bit == '0'){
+                    comp_buffer[i] = '1';
+                } else {
+                    comp_buffer[i] = '0';
+                }
+            }
+            for (int i = comp_buffer.length-1; i > 0; i--){  // add 1 to the flipped bits
+                char bit = comp_buffer[i];
+                if (bit == '1'){
+                    comp_buffer[i] = '0';
+                } else {        // bit == '0'
+                    comp_buffer[i] = '1';
+                    if (i==1){
+                        comp_buffer[0] = '1';
+                    }
+                    break;
+                }
+            }
+            if (comp_buffer[0] == 0){
+                comp_buffer[1] = '1';
+            }
+            return String.valueOf(comp_buffer);
+            // add one to the flipped bits and see if there's an overflow needed
+        }
+        return binary;
     }
 }
