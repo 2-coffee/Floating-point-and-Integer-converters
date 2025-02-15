@@ -42,7 +42,8 @@ public class SignedRep {
 
                     break;
                 }
-                else if (rep.equalsIgnoreCase("2's complement")){
+                else if (rep.equalsIgnoreCase("2's complement") 
+                    || rep.equalsIgnoreCase("2s complement")){
                     String twosComp = twoCompsTOSigned(response);
                     System.out.println("2's Complement to Signed: " + twosComp);
 
